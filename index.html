@@ -4,11 +4,13 @@ title: Yiming's Blog
 ---
 <div class="container">
     <div class="row">
-       <h2>{{ page.title }}</h2>
-        <p>welcome to Yiming's blog!</p>
+        <div class="page-header text-center">
+            <h1>{{ page.title }}<small></small></h1>
+        </div>
+
         <ul>
         　　{% for post in site.posts %}
-        　　　　<li>{{ post.date | date_to_string }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+        　　　　<li>{{ post.date | date_to_string }} - - - <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
         　　{% endfor %}
         </ul> 
     </div>
