@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+　　<html>
+　　<head>
+　　　　<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+　　　　<title>验证码完成按钮的优化</title>
+        <link rel="stylesheet" href="/blog/css/bootstrap.min.css">
+　　</head>
+　　<body>
+
+　　　　<h1 id="section">验证码完成按钮的优化</h1>
+
+<hr />
+
+<p>前几天，领导提了一个需求：当用户输入验证码的时候，若6位数字的验证码还没全部输入到验证码输入框，输入框下面的“完成”按钮应该是浅色的，表示当前还不可用；当第六个数字输入后，按钮颜色自动由浅色变成深色，表示可用。</p>
+
+<p>很自然地，我给输入框绑定了一个 keyup 事件，监听每一次的键盘输入，当且仅当输入了 6 位数字的时候，改变按钮的样式。模拟代码如下所示：</p>
+
+<pre><code>$("#input").keyup(function(){
+    if(/^\d{6}$/.test($("#input").val())){
+        $("#div").css("opacity","1");
+    }else{
+        $("#div").css("opacity","0.5"); 
+    }
+});
+</code></pre>
+
+<p>代码提交后，过了两天，测试同事反映，有的时候验证码填进去了，但是按钮还是浅色的。经查，是因为在测试环境下，验证码并不是发送到手机，而是显示在后台生成的一个网页上，测试时，同事将验证码复制后，用鼠标右键将其粘贴至输入框，由于这个过程并没有键盘操作，所以没有被监听到。</p>
+
+<p>如何监听鼠标右键粘贴行为呢？查了一些资料后发现，要监听鼠标右键的操作并不是很容易完美实现，但是可以监听粘贴这一操作。根据网上的一些资料，我给代码加了一段如下：</p>
+
+<pre><code>$("#input").bind("paste",function(){        
+    if(/^\d{6}$/.test($("#input").val())){
+        $("#div").css("opacity","1");
+    }else{
+        $("#div").css("opacity","0.5"); 
+        }                                      
+});
+</code></pre>
+
+<p>可是，运用这个方法并没有完美地解决问题。因为当 paste 执行的时候，你要粘贴的内容还没有添加进输入框中，于是它只能检测到粘贴这一操作，并不能获取到具体粘贴的内容。</p>
+
+<p>要解决这一问题，可以加一个 setTimeout 函数，设置一个小小的延迟，保证先将要粘贴的内容填进输入框内，再对其进行操作。这样，问题就完美解决啦。</p>
+
+<pre><code>$("#input").bind("paste",function(){
+    setTimeout(function(){
+        if(/^\d{6}$/.test($("#input").val())){
+            $("#div").css("opacity","1");
+        }else{
+            $("#div").css("opacity","0.5"); 
+        }                              
+    },5);
+});
+</code></pre>
+
+
+　　</body>
+　　</html>
