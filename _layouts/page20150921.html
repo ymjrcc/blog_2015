@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+　　<html>
+　　<head>
+　　　　<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+　　　　<title>{{ page.title }}</title>
+        <link rel="stylesheet" href="{{"/css/bootstrap.min.css" | prepend:site.baseurl}}">
+        <style>
+            #div{
+                background: #70b544;
+                color:#fff;
+                opacity: 0.5;
+                width: 50px;
+                height: 25px;
+                line-height: 25px;
+                text-align: center;
+                vertical-align: middle;
+                margin-top: 10px;
+                cursor: pointer;
+                border-radius: 2px;
+            }
+        </style>
+　　</head>
+　　<body>
+        <div class="container">
+            <div class="row">
+                {{ content }}
+                <hr>
+                <h5>附演示demo：</h5>
+                <input type="text" id="input" maxlength="6">
+                <div id="div">完成</div>
+            </div>
+        </div>
+        
+        <script src="{{"/js/jquery-1.11.1.min.js" | prepend:site.baseurl}}"></script>
+        <script>
+        $("#input").keyup(function(){
+            if(/^\d{6}$/.test($("#input").val())){
+                $("#div").css("opacity","1");
+                $("#div").off("click");
+                $("#div").click(function(){alert("success!")});
+            }else{
+                $("#div").css("opacity","0.5");
+                $("#div").off("click"); 
+            }
+        });
+
+        $("#input").bind("paste",function(){
+            setTimeout(function(){
+                if(/^\d{6}$/.test($("#input").val())){
+                    $("#div").css("opacity","1");
+                    $("#div").off("click");
+                    $("#div").click(function(){alert("success!")});
+                }else{
+                    $("#div").css("opacity","0.5");
+                    $("#div").off("click"); 
+                }                              
+            },5);
+        });
+        </script>
+　　</body>
+　　</html>
